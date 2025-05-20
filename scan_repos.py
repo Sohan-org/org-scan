@@ -7,7 +7,7 @@ from openpyxl import Workbook
 import shutil
  
 # === CONFIG ===
-org = "Anusreemv2004"
+org = "Sohan-org"
 username = os.getenv('GITHUB_USERNAME')
 token = os.getenv('GITHUB_TOKEN')
  

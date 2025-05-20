@@ -1,0 +1,44 @@
+name: Generate Codacy Repo Report
+ 
+on:
+  workflow_dispatch:
+ 
+permissions:
+  contents: write  # Needed for pushing to repo
+ 
+jobs:
+  generate-codacy-report:
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+ 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+ 
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install PyGithub pandas openpyxl
+ 
+      - name: Run Codacy repo detection script
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: python generate_codacy_report.py
+ 
+      - name: Commit and push Excel report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          mkdir -p reports
+          mv repos_with_codacy.xlsx reports/
+          git add reports/repos_with_codacy.xlsx
+          git commit -m "Add Codacy repos report"
+          git push
+
+ 
+change your token
+ 
